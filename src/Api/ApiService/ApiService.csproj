@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.All" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BussinessInterface\BussinessInterface.csproj" />
+    <ProjectReference Include="..\..\Interface\BussinessInterface.csproj" />
   </ItemGroup>
 
 </Project>

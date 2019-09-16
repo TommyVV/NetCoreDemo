@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BussinessInterface\BussinessInterface.csproj" />
-    <ProjectReference Include="..\Utility\Utility.csproj" />
+    <ProjectReference Include="..\infrastructure\Utility.csproj" />
+    <ProjectReference Include="..\Interface\BussinessInterface.csproj" />
   </ItemGroup>
 
 </Project>

@@ -11,8 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DomainService\DomainService.csproj" />
     <ProjectReference Include="..\Api\ApiService\ApiService.csproj" />
+    <ProjectReference Include="..\DomainService\DomainService.csproj" />
+    <ProjectReference Include="..\infrastructure\Utility.csproj" />
+    <ProjectReference Include="..\Interface\BussinessInterface.csproj" />
   </ItemGroup>
 
 </Project>
