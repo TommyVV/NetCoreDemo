@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiService
 {
-    public class TestController:Controller
+    public class TestController: ControllerBase
     {
         private readonly IBussinessProcess bussiness;
 

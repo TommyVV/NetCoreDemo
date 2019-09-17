@@ -15,7 +15,7 @@ namespace HostApplication
         public void ConfigureServices(IServiceCollection services)
         {
             //添加MVC
-            services.AddMvc();
+            services.AddMvcCore().AddJsonFormatters();
             //依赖注入
             AddService(services);
 
