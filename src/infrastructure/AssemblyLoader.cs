@@ -13,7 +13,7 @@ namespace Utility
         private static readonly ConcurrentDictionary<string, Assembly> dicAssemblies = new ConcurrentDictionary<string, Assembly>();
 
         /// <summary>
-        /// Initializes the <see cref="T:Newegg.EC.Reflection.AssemblyLoader"/> class.
+        /// Initializes the AssemblyLoader.
         /// </summary>
         static AssemblyLoader()
         {

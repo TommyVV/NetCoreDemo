@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Utility
 {
@@ -6,19 +7,14 @@ namespace Utility
     {
         public Type Service { get; set; }
 
-        public LifeTime LifeTime { get; set; }
+        public ServiceLifetime LifeTime { get; set; }
 
-        public DependencyInjectionAttribute(Type service, LifeTime lifeTime=LifeTime.Singleton)
+        public DependencyInjectionAttribute(Type service, ServiceLifetime lifeTime = ServiceLifetime.Singleton)
         {
             Service = service;
             LifeTime = lifeTime;
         }
     }
 
-    public enum LifeTime
-    {
-        Singleton,
-        Scoped,
-        Transient
-    }
+   
 }

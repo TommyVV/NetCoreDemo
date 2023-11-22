@@ -3,7 +3,7 @@ using Utility;
 
 namespace DomainService
 {
-    [DependencyInjection(typeof(IBussinessProcess))]
+    [DependencyInjection(typeof(IBussinessProcess),Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped)]
     public class BussinessProcess:IBussinessProcess
     {
         private readonly IProcess process;

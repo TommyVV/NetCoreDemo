@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Utility;
 
 namespace HostApplication
@@ -15,9 +17,9 @@ namespace HostApplication
         public void ConfigureServices(IServiceCollection services)
         {
             //添加MVC
-            services.AddMvcCore().AddJsonFormatters();
+            services.AddMvcCore();
             //依赖注入
-            AddService(services);
+            services.AddService();
 
         }
 
@@ -28,46 +30,13 @@ namespace HostApplication
             {
                 app.UseDeveloperExceptionPage();
             }
-
+          
             //使用MVC
-            app.UseMvc();
+            //app.UseMvc();
+            app.UseRouting().UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
         }
 
-        public void AddService(IServiceCollection service)
-        {
-            var assembiles = AssemblyLoader.LoadAll();
-
-            var services = assembiles
-                .SelectMany(assembly => AssemblyTypeLoader.GetTypes(assembly, ContainsDependencyInjectionAttribute));
-
-            var serviceGroup = services
-                .SelectMany(s => s.GetCustomAttributes<DependencyInjectionAttribute>().Select(attr => new { Attr = attr, Impl = s })).GroupBy(define => define.Attr.Service);
-
-            foreach (var s in serviceGroup)
-            {
-                var instance = s.FirstOrDefault();
-
-                if (instance == null) continue;
-
-                //注入
-                service.AddSingleton(instance.Attr.Service, instance.Impl);
-            }
-        }
-
-        private static bool ContainsDependencyInjectionAttribute(Type type)
-        {
-            if (!type.IsClass)
-            {
-                return false;
-            }
-
-            if (type.IsAbstract)
-            {
-                return false;
-            }
-
-            return !type.GetCustomAttributes<DependencyInjectionAttribute>().IsNullOrEmpty();
-        }
+       
     }
 }
