@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{16D97619-44A4-407D-801A-EF7E82C26977}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainService", "src\Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HostApplication", "src\Host\HostApplication.csproj", "{AC61AC10-46D2-4911-BBD6-F37B837AF526}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "src\infrastructure\Utility.csproj", "{7C8B0243-FF33-46B5-AA67-E737D794B705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyExtension", "src\infrastructure\DependencyExtension.csproj", "{7C8B0243-FF33-46B5-AA67-E737D794B705}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BussinessInterface", "src\Interface\BussinessInterface.csproj", "{7BDC1B60-446F-436C-8524-0D1D33B11BED}"
 EndProject

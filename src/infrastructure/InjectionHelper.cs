@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
-namespace Utility
+namespace DependencyExtension
 {
     public static class InjectionHelper
     {
@@ -16,7 +15,7 @@ namespace Utility
 
             if (!source.IsNullOrEmpty())
             {
-                foreach (TSource item in source)
+                foreach (var item in source)
                 {
                     action(item);
                 }

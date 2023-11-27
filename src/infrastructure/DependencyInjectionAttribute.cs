@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Utility
+namespace DependencyExtension
 {
     public class DependencyInjectionAttribute:Attribute
     {

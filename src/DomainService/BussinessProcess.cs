@@ -1,9 +1,10 @@
 ﻿using BussinessInterface;
-using Utility;
+using DependencyExtension;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DomainService
 {
-    [DependencyInjection(typeof(IBussinessProcess),Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped)]
+    [DependencyInjection(typeof(IBussinessProcess),ServiceLifetime.Scoped)]
     public class BussinessProcess:IBussinessProcess
     {
         private readonly IProcess process;

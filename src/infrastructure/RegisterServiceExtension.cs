@@ -4,9 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace Utility
+namespace DependencyExtension
 {
     public static class RegisterServiceExtension
     {
@@ -24,22 +23,16 @@ namespace Utility
         /// <returns>The service description metas.</returns>
         private static IEnumerable<ServiceDescriptor> ScanServiceDescriptionMetas()
         {
-            var serviceDescriptions = new List<ServiceDescriptor>();
-
-            IEnumerable<Assembly> assembiles = AssemblyLoader.LoadAll();
-            IEnumerable<Type> services = assembiles
-                .SelectMany(assembly => AssemblyTypeLoader.GetTypes(assembly, ContainsDependencyInjectionAttribute));
+            var assembiles = AssemblyLoader.LoadAll();
+            
+            var services = assembiles
+                .SelectMany(assembly => AssemblyLoader.GetTypes(assembly, ContainsDependencyInjectionAttribute));
+            
             var serviceGroup = services
                 .SelectMany(service => service.GetCustomAttributes<DependencyInjectionAttribute>().Select(attr => new { Attr = attr, Impl = service }))
                 .GroupBy(define => define.Attr.Service);
 
-            foreach (var service in serviceGroup)
-            {
-                var instance = service.FirstOrDefault();
-                serviceDescriptions.Add(new ServiceDescriptor(instance.Attr.Service, instance.Impl, instance.Attr.LifeTime));
-            }
-
-            return serviceDescriptions;
+            return serviceGroup.Select(service => service.FirstOrDefault()).Select(instance => new ServiceDescriptor(instance.Attr.Service, instance.Impl, instance.Attr.LifeTime)).ToList();
         }
 
         private static bool ContainsDependencyInjectionAttribute(Type type)

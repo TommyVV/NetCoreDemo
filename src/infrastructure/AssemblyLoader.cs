@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
-namespace Utility
+namespace DependencyExtension
 {
     public static class AssemblyLoader
     {
-        private static readonly ConcurrentDictionary<string, Assembly> dicAssemblies = new ConcurrentDictionary<string, Assembly>();
+        private static readonly ConcurrentDictionary<string, Assembly> DicAssemblies =
+            new ConcurrentDictionary<string, Assembly>();
 
         /// <summary>
         /// Initializes the AssemblyLoader.
@@ -18,7 +20,6 @@ namespace Utility
         static AssemblyLoader()
         {
             var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.GetAssemblies().ForEach(TryAdd);
             Initialize(new DirectoryInfo(currentDomain.BaseDirectory));
 
             DependencyContext.Default?.CompileLibraries?.ForEach(lib =>
@@ -32,6 +33,7 @@ namespace Utility
                 {
                     Console.WriteLine(ex);
                 }
+
                 if (paths.Count > 0)
                 {
                     foreach (var path in paths)
@@ -39,24 +41,7 @@ namespace Utility
                         Initialize(new FileInfo(path));
                     }
                 }
-
             });
-        }
-
-        /// <summary>
-        /// Load the specified assemblyName.
-        /// </summary>
-        /// <returns>The load.</returns>
-        /// <param name="assemblyName">Assembly name.</param>
-        public static Assembly Load(AssemblyName assemblyName)
-        {
-            if (dicAssemblies.TryGetValue(assemblyName.Name, out Assembly result))
-            {
-                return result;
-            }
-
-            return default(Assembly);
-
         }
 
         /// <summary>
@@ -65,7 +50,43 @@ namespace Utility
         /// <returns>The all.</returns>
         public static IEnumerable<Assembly> LoadAll()
         {
-            return dicAssemblies.Values.ToArray();
+            return DicAssemblies.Values.ToArray();
+        }
+
+        /// <summary>
+        /// Get and filter types from assemblies.
+        /// </summary>
+        /// <param name="assembly">Assembly instance.</param>
+        /// <param name="filter">Filter function.</param>
+        /// <returns>Type collection.</returns>
+        public static IEnumerable<Type> GetTypes(Assembly assembly, Func<Type, bool> filter)
+        {
+            List<Type> result;
+
+            try
+            {
+                result = assembly.GetTypes().Where(filter).ToList();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                var builder = new StringBuilder();
+                if (ex.Types.Any())
+                {
+                    ex.Types.Where(type => type != null).ForEach(type =>
+                        builder.AppendFormat("Load type: \"{0}\" fail. ", type.FullName));
+                }
+
+                if (ex.LoaderExceptions.Any())
+                {
+                    ex.LoaderExceptions.Where(x => x != null)
+                        .ForEach(x => builder.AppendFormat("Load exception: \"{0}\". ", x.Message));
+                }
+
+                var message = builder.ToString();
+                throw new Exception(message);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -75,7 +96,7 @@ namespace Utility
         /// <param name="directoryInfo">Directory info.</param>
         private static void Initialize(DirectoryInfo directoryInfo)
         {
-            var assembliesDll = directoryInfo.GetFiles("*.dll");
+            var assembliesDll = directoryInfo.GetFiles("Domain*.dll");
             if (assembliesDll.Any())
             {
                 assembliesDll.ForEach(Initialize);
@@ -95,7 +116,6 @@ namespace Utility
             }
             catch (Exception e)
             {
-                //todo log.debug(e)
                 Console.WriteLine(e);
             }
         }
@@ -106,7 +126,7 @@ namespace Utility
         /// <param name="assembly">Assembly.</param>
         private static void TryAdd(Assembly assembly)
         {
-            dicAssemblies.TryAdd(assembly.FullName, assembly);
+            DicAssemblies.TryAdd(assembly.FullName, assembly);
         }
     }
 }
